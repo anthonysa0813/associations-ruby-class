@@ -95,7 +95,25 @@ end
 - A Company has many involved_companies and has many games through involved_companies
 - An InvolvedCompany belongs to a company and belongs to a game
 - A Game has many involved_companies and has many companies through involved_companies
+
+```ruby
+class Company < ApplicationRecord
+  has_many :involved_companies, dependent: :destroy
+  has_many :games, through: :involved_companies
+end
+class Game < ApplicationRecord
+  has_many :involved_companies, dependent: :nullify
+  has_many :companies, through: :involved_companies
+end
+
+```
+
 - A Game has and belongs to many platforms
+- petition: Create a new platform in the Game involved
+
+```console
+game.platforms.push(playstation)
+```
 
 ### if not necessary to create another table in the case Game-Platform, because only save game_id and platform_id
 
@@ -110,3 +128,12 @@ rails generate migration CreateJoinTableGameToGenre game genre
 - A Game has and belongs to many genres
 - A Platform has and belongs to many games
 - A Genre has and belongs to many games
+
+```ruby
+class Game < ApplicationRecord
+  has_many :involved_companies, dependent: :nullify
+  has_many :companies, through: :involved_companies
+  has_and_belongs_to_many :platforms
+  has_and_belongs_to_many :genres
+end
+```
