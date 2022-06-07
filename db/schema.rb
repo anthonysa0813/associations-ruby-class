@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_06_004353) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_06_220632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_004353) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "criticable_type", null: false
+    t.bigint "criticable_id", null: false
+    t.index ["criticable_type", "criticable_id"], name: "index_critics_on_criticable"
     t.index ["user_id"], name: "index_critics_on_user_id"
   end
 
@@ -37,11 +40,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_004353) do
     t.string "name"
     t.text "summary"
     t.date "release_date"
-    t.integer "category"
+    t.integer "category", default: 0
     t.decimal "reting"
     t.string "cover"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "parent_id"
+    t.index ["parent_id"], name: "index_games_on_parent_id"
   end
 
   create_table "games_genres", id: false, force: :cascade do |t|
@@ -88,6 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_004353) do
   end
 
   add_foreign_key "critics", "users"
+  add_foreign_key "games", "games", column: "parent_id"
   add_foreign_key "involved_companies", "companies"
   add_foreign_key "involved_companies", "games"
 end
