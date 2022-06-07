@@ -369,3 +369,11 @@ class AddDefaultCategoryToGame < ActiveRecord::Migration[7.0]
 end
 
 ```
+
+# Callback
+
+## Task 1:
+
+```console
+rails generate migration AddDefaultCountToUser
+```
